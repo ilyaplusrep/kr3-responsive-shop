@@ -1,4 +1,11 @@
 /* =========================================
+   style.css — оформление сайта и МОБИЛЬНАЯ раскладка.
+   Подход Mobile First: всё, что здесь, — это вид на телефоне (от 360px).
+   Расширение под планшет и десктоп лежит в responsive.css.
+   ========================================= */
+
+
+/* =========================================
    1. ПЕРЕМЕННЫЕ
    ========================================= */
 :root {
@@ -8,6 +15,8 @@
   --color-text: #141210;
   --color-text-muted: #4a4540;
   --color-accent: #e0643a;
+  /* тёмный оранжевый для ТЕКСТА: у #e0643a на светлом фоне контраст < 3:1 */
+  --color-accent-dark: #b5441c;
   --color-accent-2: #a8d98f;
   --color-accent-3: #f2c94c;
   --color-border: #141210;
@@ -19,12 +28,12 @@
   --font-text: "Manrope", sans-serif;
   --font-title: "Alegreya", serif;
 
-  /* отступы */
+  /* отступы (--space-xl увеличивается на планшете, см. responsive.css) */
   --space-xs: 4px;
   --space-sm: 8px;
   --space-md: 16px;
   --space-lg: 32px;
-  --space-xl: 64px;
+  --space-xl: 40px;
 
   /* скругления */
   --radius-sm: 8px;
@@ -40,7 +49,10 @@
   --transition: 0.15s ease;
 
   /* высота липкой шапки — отступ для якорей и липких фильтров */
-  --header-offset: 100px;
+  --header-offset: 80px;
+
+  /* минимальный размер области нажатия на телефоне */
+  --tap-size: 44px;
 }
 
 
@@ -67,9 +79,9 @@ ul {
   list-style: none;
 }
 
-img {
-  max-width: 100%;
-  display: block;
+/* атрибут hidden должен прятать элемент, даже если у класса задан display */
+[hidden] {
+  display: none !important;
 }
 
 
@@ -101,10 +113,16 @@ a {
   transition: color var(--transition);
 }
 
-/* единый видимый фокус для всех ссылок и кнопок */
+/* единый видимый фокус для всех интерактивных элементов.
+   Тёмная обводка — контраст с фоном больше 3:1 */
 a:focus-visible,
-button:focus-visible {
-  outline: 3px solid var(--color-accent-2);
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--color-text);
   outline-offset: 3px;
 }
 
@@ -115,6 +133,11 @@ button:focus-visible {
   scroll-margin-top: var(--header-offset);
 }
 
+/* main получает фокус через skip-link — рамка тут не нужна */
+main:focus {
+  outline: none;
+}
+
 .page {
   max-width: 1100px;
   margin: 0 auto;
@@ -122,7 +145,7 @@ button:focus-visible {
 }
 
 .page-title {
-  font-size: 48px;
+  font-size: 34px;
   margin-bottom: var(--space-lg);
 }
 
@@ -130,7 +153,7 @@ button:focus-visible {
 .section-title {
   position: relative;
   display: inline-block;
-  font-size: 40px;
+  font-size: 30px;
   margin-bottom: var(--space-lg);
 }
 
@@ -141,33 +164,73 @@ button:focus-visible {
   right: -6px;
   bottom: 4px;
   z-index: -1;
-  height: 14px;
+  height: 12px;
   background-color: var(--color-accent-2);
   transform: rotate(-1deg);
 }
 
 
 /* =========================================
-   4. КНОПКИ
+   4. ДОСТУПНОСТЬ: ВСПОМОГАТЕЛЬНЫЕ КЛАССЫ
+   ========================================= */
+
+/* ссылка «перейти к содержимому» — видна только при фокусе с клавиатуры */
+.skip-link {
+  position: absolute;
+  top: var(--space-sm);
+  left: var(--space-sm);
+  z-index: 200;
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--color-text);
+  color: var(--color-bg);
+  font-weight: 800;
+  border-radius: var(--radius-sm);
+  transform: translateY(-200%);
+  transition: transform var(--transition);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+/* текст скрыт с экрана, но его читает скринридер */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+/* =========================================
+   5. КНОПКИ
    ========================================= */
 .button {
   display: inline-block;
-  padding: 14px 28px;
+  min-height: var(--tap-size);
+  padding: 12px 24px;
   border: none;
   border-radius: var(--radius-pill);
   background-color: var(--color-text);
   color: var(--color-bg);
   font: inherit;
   font-weight: 800;
+  text-align: center;
   text-decoration: none;
   white-space: nowrap;
   cursor: pointer;
   transition: transform var(--transition), box-shadow var(--transition), background-color var(--transition);
 }
 
-/* наведение — кнопка «приподнимается» */
+/* наведение — кнопка «приподнимается». Текст тёмный: на оранжевом так контрастнее */
 .button:hover:not(:disabled) {
   background-color: var(--color-accent);
+  color: var(--color-text);
   transform: translate(-2px, -2px);
   box-shadow: 4px 4px 0 var(--color-border);
 }
@@ -189,6 +252,12 @@ button:focus-visible {
   color: var(--color-bg);
 }
 
+.button--small {
+  min-height: 36px;
+  padding: 6px 16px;
+  font-size: 14px;
+}
+
 /* выключенная кнопка (для ссылки-кнопки — модификатор) */
 .button:disabled,
 .button--disabled {
@@ -198,7 +267,7 @@ button:focus-visible {
 
 
 /* =========================================
-   5. БЕЙДЖ (отдельный блок, используется в миксах)
+   6. БЕЙДЖ (отдельный блок, используется в миксах)
    ========================================= */
 .badge {
   display: inline-block;
@@ -214,7 +283,6 @@ button:focus-visible {
 
 .badge--hit {
   background-color: var(--color-accent);
-  color: var(--color-surface);
 }
 
 .badge--new {
@@ -227,7 +295,7 @@ button:focus-visible {
 
 
 /* =========================================
-   6. ШАПКА И НАВИГАЦИЯ
+   7. ШАПКА И НАВИГАЦИЯ (мобильная: меню-бургер)
    ========================================= */
 .site-header {
   position: sticky;
@@ -236,42 +304,127 @@ button:focus-visible {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: var(--space-lg);
-  padding: var(--space-md) var(--space-lg);
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
   border-bottom: var(--border);
   background-color: var(--color-bg);
 }
 
 .site-header__logo {
   font-family: var(--font-title);
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 900;
   text-decoration: none;
 }
 
-.site-nav__list {
-  display: flex;
-  gap: var(--space-lg);
+/* кнопка «Меню» с иконкой из трёх полосок */
+.nav-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-height: var(--tap-size);
+  padding: 0 var(--space-md);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
 }
 
+/* средняя полоска — сам span, верхняя и нижняя — ::before и ::after */
+.nav-toggle__icon,
+.nav-toggle__icon::before,
+.nav-toggle__icon::after {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background-color: currentColor;
+  transition: transform var(--transition), background-color var(--transition);
+}
+
+.nav-toggle__icon {
+  position: relative;
+}
+
+.nav-toggle__icon::before,
+.nav-toggle__icon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+
+.nav-toggle__icon::before {
+  top: -6px;
+}
+
+.nav-toggle__icon::after {
+  top: 6px;
+}
+
+/* меню открыто (это видно по aria-expanded) — полоски складываются в крестик */
+.nav-toggle[aria-expanded="true"] .nav-toggle__icon {
+  background-color: transparent;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__icon::before {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__icon::after {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* на телефоне меню — выпадающая панель под шапкой, по умолчанию скрыта */
+.site-nav {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  padding: var(--space-sm) var(--space-md) var(--space-md);
+  border-bottom: var(--border);
+  background-color: var(--color-bg);
+  box-shadow: 0 6px 0 var(--color-border);
+}
+
+.site-nav--open {
+  display: block;
+}
+
+.site-nav__list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* крупная область нажатия у каждого пункта */
 .site-nav__link {
+  display: flex;
+  align-items: center;
+  min-height: var(--tap-size);
   font-weight: 600;
+  font-size: 18px;
   text-decoration: none;
 }
 
 .site-nav__link:hover {
-  color: var(--color-accent);
+  color: var(--color-accent-dark);
   text-decoration: underline;
   text-underline-offset: 4px;
 }
 
+/* активный пункт: текст тёмный (контраст), выделение — толстым подчёркиванием */
 .site-nav__link--active {
-  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 6px;
 }
 
 
 /* =========================================
-   7. ХЛЕБНЫЕ КРОШКИ
+   8. ХЛЕБНЫЕ КРОШКИ
    ========================================= */
 .breadcrumbs {
   margin-bottom: var(--space-md);
@@ -287,7 +440,7 @@ button:focus-visible {
 }
 
 .breadcrumbs__link:hover {
-  color: var(--color-accent);
+  color: var(--color-accent-dark);
 }
 
 .breadcrumbs__item--current {
@@ -297,10 +450,10 @@ button:focus-visible {
 
 
 /* =========================================
-   8. HERO
+   9. HERO
    ========================================= */
 .hero {
-  padding: var(--space-xl) 0;
+  padding: var(--space-lg) 0 var(--space-xl);
 }
 
 /* надпись над заголовком — наклейка */
@@ -310,6 +463,7 @@ button:focus-visible {
   border: 2px solid var(--color-border);
   background-color: var(--color-accent-2);
   color: var(--color-text);
+  font-size: 14px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -317,7 +471,7 @@ button:focus-visible {
 }
 
 .hero__title {
-  font-size: 64px;
+  font-size: 40px;
   font-weight: 900;
   margin: var(--space-md) 0;
 }
@@ -325,29 +479,40 @@ button:focus-visible {
 .hero__accent {
   display: inline-block;
   background-color: var(--color-accent);
-  color: var(--color-bg);
-  padding: 0 16px 6px;
+  color: var(--color-text);
+  padding: 0 12px 4px;
   transform: rotate(-2deg);
 }
 
 .hero__text {
-  font-size: 20px;
+  font-size: 18px;
   max-width: 560px;
   margin-bottom: var(--space-lg);
 }
 
+/* на телефоне кнопка и ссылка — друг под другом, кнопка во всю ширину */
+.hero__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-md);
+}
+
 .hero__link {
-  margin-left: var(--space-md);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: var(--tap-size);
   font-weight: 800;
 }
 
 .hero__link:hover {
-  color: var(--color-accent);
+  color: var(--color-accent-dark);
 }
 
 
 /* =========================================
-   9. ПРЕИМУЩЕСТВА
+   10. ПРЕИМУЩЕСТВА
    ========================================= */
 .advantages {
   margin-bottom: var(--space-xl);
@@ -356,15 +521,15 @@ button:focus-visible {
 .advantages__list {
   counter-reset: advantage;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-lg);
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
 }
 
 /* карточки-наклейки с номерами, которые CSS считает сам */
 .advantages__item {
   counter-increment: advantage;
   position: relative;
-  padding: var(--space-lg) var(--space-lg) var(--space-lg) 88px;
+  padding: var(--space-md) var(--space-md) var(--space-md) 72px;
   background-color: var(--color-surface);
   border: var(--border);
   border-radius: var(--radius-md);
@@ -374,8 +539,8 @@ button:focus-visible {
 .advantages__item::before {
   content: counter(advantage);
   position: absolute;
-  top: var(--space-lg);
-  left: var(--space-lg);
+  top: var(--space-md);
+  left: var(--space-md);
   width: 40px;
   height: 40px;
   display: grid;
@@ -383,65 +548,65 @@ button:focus-visible {
   border: 2px solid var(--color-border);
   border-radius: 50%;
   background-color: var(--color-accent);
-  color: var(--color-surface);
+  color: var(--color-text);
   font-family: var(--font-title);
   font-size: 22px;
   font-weight: 900;
 }
 
 .advantages__title {
-  font-size: 24px;
+  font-size: 22px;
 }
 
 
 /* =========================================
-   10. ГЛАВНАЯ: ХИТЫ И «КАМЕНЬ ДНЯ»
+   11. ГЛАВНАЯ: ХИТЫ И «КАМЕНЬ ДНЯ»
    ========================================= */
+/* на телефоне «Камень дня» просто идёт под хитами */
 .home-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 260px;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-lg);
   align-items: start;
-}
-
-.popular {
   margin-bottom: var(--space-xl);
 }
 
 .popular__grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-lg);
 }
 
 /* «Камень дня» — слегка наклеен криво */
 .promo {
-  padding: var(--space-lg);
+  padding: var(--space-lg) var(--space-md);
   background-color: var(--color-accent-2);
   border: var(--border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow);
-  transform: rotate(1.5deg);
+  transform: rotate(1deg);
 }
 
 .promo__title {
-  font-size: 32px;
+  font-size: 28px;
   margin-bottom: var(--space-sm);
 }
 
 .promo__link {
-  display: inline-block;
-  margin-top: var(--space-md);
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-size);
+  margin-top: var(--space-sm);
   font-weight: 800;
 }
 
 .promo__link:hover {
-  color: var(--color-accent);
+  color: var(--color-text-muted);
 }
 
 
 /* =========================================
-   11. FAQ — ЧАСТЫЕ ВОПРОСЫ
+   12. FAQ — ЧАСТЫЕ ВОПРОСЫ
    ========================================= */
 .faq {
   margin-bottom: var(--space-xl);
@@ -472,9 +637,10 @@ button:focus-visible {
   justify-content: space-between;
   align-items: center;
   gap: var(--space-md);
-  padding: var(--space-md) var(--space-lg);
+  min-height: var(--tap-size);
+  padding: var(--space-md);
   font-weight: 800;
-  font-size: 18px;
+  font-size: 17px;
   cursor: pointer;
   list-style: none;
 }
@@ -503,22 +669,25 @@ button:focus-visible {
 .faq__item[open] .faq__question::after {
   transform: rotate(45deg);
   background-color: var(--color-accent);
-  color: var(--color-surface);
 }
 
 .faq__answer {
-  padding: 0 var(--space-lg) var(--space-md);
+  padding: 0 var(--space-md) var(--space-md);
   color: var(--color-text-muted);
 }
 
 
 /* =========================================
-   12. КАРТОЧКА ТОВАРА
+   13. КАРТОЧКА ТОВАРА
+   На телефоне карточка горизонтальная: картинка слева, текст справа.
+   С 480px (responsive.css) становится вертикальной.
    ========================================= */
 .product-card {
   position: relative;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  column-gap: var(--space-md);
+  align-items: start;
   padding: var(--space-md);
   background-color: var(--color-surface);
   border: var(--border);
@@ -527,10 +696,10 @@ button:focus-visible {
   transition: transform var(--transition), box-shadow var(--transition);
 }
 
-/* карточка приподнимается при наведении */
-.product-card:hover {
-  transform: translate(-4px, -4px);
-  box-shadow: var(--shadow-lg);
+/* обёртка <picture>: занимает левую колонку на три строки (цена, название, описание) */
+.product-card__media {
+  display: block;
+  grid-row: 1 / 4;
 }
 
 .product-card__image {
@@ -538,7 +707,6 @@ button:focus-visible {
   height: auto;
   aspect-ratio: 1 / 1;
   object-fit: cover;
-  margin-bottom: var(--space-md);
   border: 2px solid var(--color-border);
   border-radius: var(--radius-sm);
   background-color: var(--color-bg);
@@ -553,21 +721,23 @@ button:focus-visible {
 }
 
 .product-card__price {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 800;
 }
 
 .product-card__title {
-  font-size: 20px;
-  margin: var(--space-sm) 0;
+  font-size: 18px;
+  margin: var(--space-xs) 0;
 }
 
 .product-card__description {
   color: var(--color-text-muted);
+  font-size: 15px;
 }
 
-/* ссылка и кнопка — в строку, прижаты к низу карточки */
+/* ссылка и кнопка — во всю ширину карточки, под картинкой и текстом */
 .product-card__actions {
+  grid-column: 1 / -1;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -578,11 +748,14 @@ button:focus-visible {
 }
 
 .product-card__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-size);
   font-weight: 800;
 }
 
 .product-card__link:hover {
-  color: var(--color-accent);
+  color: var(--color-accent-dark);
 }
 
 /* вариант карточки: товара нет в наличии */
@@ -593,67 +766,140 @@ button:focus-visible {
 
 
 /* =========================================
-   13. КАТАЛОГ И ФИЛЬТРЫ
+   14. КАТАЛОГ И ФИЛЬТРЫ
+   На телефоне: фильтры сверху и свёрнуты, товары — в одну колонку.
    ========================================= */
 .catalog {
   display: grid;
-  grid-template-columns: 240px 1fr;
-  grid-template-areas: "filters products";
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "filters"
+    "products";
   gap: var(--space-lg);
   align-items: start;
 }
 
-.catalog__products {
+.catalog__results {
   grid-area: products;
+}
+
+.catalog__count {
+  margin-bottom: var(--space-md);
+  font-weight: 800;
+}
+
+.catalog__empty {
+  padding: var(--space-lg) var(--space-md);
+  border: 3px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.catalog__products {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-lg);
 }
 
 .filters {
   grid-area: filters;
-  position: sticky;
-  top: var(--header-offset);
-  padding: var(--space-lg);
+  padding: var(--space-md);
   background-color: var(--color-surface);
   border: var(--border);
   border-radius: var(--radius-md);
 }
 
+.filters__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-md);
+}
+
 .filters__title {
-  font-size: 28px;
-  margin-bottom: var(--space-md);
+  font-size: 26px;
+}
+
+/* панель с фильтрами свёрнута, пока не нажали «Показать» */
+.filters__panel {
+  display: none;
+  margin-top: var(--space-md);
+}
+
+.filters--open .filters__panel {
+  display: block;
+}
+
+.filters__group {
+  margin: 0 0 var(--space-md);
+  padding: 0;
+  border: 0;
 }
 
 .filters__subtitle {
+  margin-bottom: var(--space-sm);
+  padding: 0;
+  font-family: var(--font-title);
   font-size: 18px;
-  margin: var(--space-md) 0 var(--space-sm);
+  font-weight: 700;
+}
+
+/* варианты фильтра — «таблетки», которые переносятся на новую строку */
+.filters__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
 }
 
 .filters__option {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  min-height: var(--tap-size);
+  padding: 0 var(--space-md);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-pill);
   cursor: pointer;
+  transition: background-color var(--transition);
+}
+
+/* отмеченный вариант подсвечиваем — :has() проверяет чекбокс внутри label */
+.filters__option:has(:checked) {
+  background-color: var(--color-accent-2);
+}
+
+.filters__option:has(:focus-visible) {
+  outline: 3px solid var(--color-text);
+  outline-offset: 2px;
 }
 
 .filters__checkbox {
-  accent-color: var(--color-accent);
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-text);
 }
 
 
 /* =========================================
-   14. СТРАНИЦА ТОВАРА И ТАБЛИЦА
+   15. СТРАНИЦА ТОВАРА И ТАБЛИЦА
    ========================================= */
 .product {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-xl);
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-lg);
   align-items: center;
   margin-bottom: var(--space-xl);
 }
 
+.product__media {
+  display: block;
+}
+
+/* на телефоне — широкий кадр 4:3, чтобы не занимал весь экран по высоте */
 .product__image {
   width: 100%;
   height: auto;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
   border: var(--border);
   border-radius: var(--radius-md);
@@ -662,7 +908,7 @@ button:focus-visible {
 }
 
 .product__title {
-  font-size: 48px;
+  font-size: 34px;
   margin: var(--space-sm) 0 var(--space-md);
 }
 
@@ -672,34 +918,37 @@ button:focus-visible {
 }
 
 .product__price {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 800;
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-md);
 }
 
-.specs {
+.product__info .button {
   width: 100%;
+}
+
+/* обёртка таблицы: если таблица шире экрана, прокручивается только она */
+.table-wrapper {
   max-width: 640px;
-  border-collapse: collapse;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   background-color: var(--color-surface);
   border: var(--border);
   box-shadow: var(--shadow);
 }
 
-.specs__caption {
-  text-align: left;
-  font-family: var(--font-title);
+.specs-section__title {
   font-size: 28px;
-  font-weight: 900;
   margin-bottom: var(--space-md);
+}
+
+.specs {
+  width: 100%;
+  border-collapse: collapse;
 }
 
 .specs__row:hover {
   background-color: var(--color-bg);
-}
-
-.specs__row--head:hover {
-  background-color: transparent;
 }
 
 .specs__cell {
@@ -717,13 +966,55 @@ button:focus-visible {
   font-weight: 800;
 }
 
+/* --- мобильный вид таблицы: каждая строка — карточка «параметр сверху, значение снизу» --- */
+.specs,
+.specs tbody,
+.specs__row,
+.specs__cell {
+  display: block;
+}
+
+/* шапка таблицы на телефоне не нужна визуально, но остаётся для скринридера */
+.specs thead {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.specs__row {
+  padding: 12px var(--space-md);
+  border-bottom: 2px solid var(--color-border);
+}
+
+.specs__row:last-child {
+  border-bottom: 0;
+}
+
+.specs__cell {
+  padding: 0;
+  border-bottom: 0;
+}
+
+.specs__cell--title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+
 
 /* =========================================
-   15. МОДАЛЬНОЕ ОКНО
+   16. МОДАЛЬНОЕ ОКНО
    ========================================= */
 .order-dialog {
   width: min(100% - 32px, 560px);
-  padding: var(--space-lg);
+  /* окно не выше экрана — длинная форма прокручивается внутри */
+  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  padding: var(--space-md);
   background-color: var(--color-bg);
   color: var(--color-text);
   border: var(--border);
@@ -736,13 +1027,14 @@ button:focus-visible {
 }
 
 .order-dialog__title {
-  font-size: 32px;
-  margin-bottom: var(--space-lg);
+  font-size: 26px;
+  margin-bottom: var(--space-md);
 }
 
 
 /* =========================================
-   16. ФОРМА ЗАЯВКИ
+   17. ФОРМЫ (заявка, модальное окно, обратная связь)
+   На телефоне все поля — в одну колонку.
    ========================================= */
 .order-page {
   max-width: 560px;
@@ -757,6 +1049,7 @@ button:focus-visible {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
+  min-height: var(--tap-size);
 }
 
 .order-form__label {
@@ -765,26 +1058,28 @@ button:focus-visible {
   font-weight: 800;
 }
 
+/* 16px шрифт в полях — иначе iPhone приближает страницу при фокусе */
 .order-form__input {
   width: 100%;
+  min-height: var(--tap-size);
   padding: 10px 14px;
   background-color: var(--color-surface);
+  color: var(--color-text);
   border: 2px solid var(--color-border);
   border-radius: var(--radius-sm);
   font: inherit;
+  font-size: 16px;
   transition: border-color var(--transition), box-shadow var(--transition);
 }
 
 /* поле при наведении */
 .order-form__input:hover {
-  border-color: var(--color-accent-2);
+  border-color: var(--color-accent-dark);
 }
 
-/* поле в фокусе (кликом или табом) — стоит ниже :hover, поэтому важнее */
+/* поле в фокусе — тень + общая обводка фокуса */
 .order-form__input:focus {
-  outline: none;
-  border-color: var(--color-accent-2);
-  box-shadow: 4px 4px 0 var(--color-border);
+  box-shadow: 4px 4px 0 var(--color-accent-2);
 }
 
 .order-form__input[aria-invalid="true"] {
@@ -801,8 +1096,9 @@ button:focus-visible {
 
 /* чекбокс в цвет акцента */
 .order-form__checkbox {
-  width: 20px;
-  height: 20px;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
   accent-color: var(--color-accent);
   cursor: pointer;
 }
@@ -811,20 +1107,26 @@ button:focus-visible {
   cursor: pointer;
 }
 
+/* на телефоне кнопки друг под другом и во всю ширину; главная — сверху */
 .order-form__actions {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column-reverse;
   gap: var(--space-sm);
   margin-top: var(--space-lg);
 }
 
-/* сообщение об успешной отправке */
+.order-form__actions .button {
+  width: 100%;
+}
+
+/* сообщение об успешной отправке — на телефоне во всю ширину снизу */
 .success-message {
   position: fixed;
-  right: var(--space-lg);
-  bottom: var(--space-lg);
+  left: var(--space-md);
+  right: var(--space-md);
+  bottom: var(--space-md);
   z-index: 100;
-  padding: var(--space-md) var(--space-lg);
+  padding: var(--space-md);
   background-color: var(--color-accent-2);
   border: var(--border);
   box-shadow: var(--shadow);
@@ -833,41 +1135,66 @@ button:focus-visible {
 
 
 /* =========================================
-   17. КОНТАКТЫ
+   18. КОНТАКТЫ
    ========================================= */
-.contacts {
+.contacts-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-xl);
+  align-items: start;
   margin-bottom: var(--space-xl);
 }
 
 .contacts__list {
+  display: grid;
+  gap: var(--space-md);
   font-style: normal;
 }
 
 .contacts__item {
-  margin-bottom: var(--space-sm);
+  padding: var(--space-md);
+  background-color: var(--color-surface);
+  border: var(--border);
+  border-radius: var(--radius-md);
+}
+
+.contacts__label {
+  display: block;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+
+/* длинный адрес почты переносится, а не распирает экран */
+.contacts__link {
+  overflow-wrap: anywhere;
+  font-weight: 800;
 }
 
 .contacts__link:hover {
-  color: var(--color-accent);
+  color: var(--color-accent-dark);
 }
 
-.contacts-cta {
+.feedback {
+  padding: var(--space-md);
   background-color: var(--color-accent-2);
   border: var(--border);
   border-radius: var(--radius-md);
-  padding: var(--space-lg);
+  box-shadow: var(--shadow);
 }
 
-.contacts-cta__text {
+.feedback__text {
   margin-bottom: var(--space-md);
 }
 
 
 /* =========================================
-   18. ПОДВАЛ
+   19. ПОДВАЛ
    ========================================= */
 .site-footer {
-  padding: var(--space-lg);
+  padding: var(--space-lg) var(--space-md);
   border-top: var(--border);
   color: var(--color-text-muted);
   font-size: 14px;
@@ -880,20 +1207,23 @@ button:focus-visible {
 .footer-nav__list {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-md);
+  gap: var(--space-xs) var(--space-md);
 }
 
 .footer-nav__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
   font-weight: 600;
 }
 
 .footer-nav__link:hover {
-  color: var(--color-accent);
+  color: var(--color-accent-dark);
 }
 
 
 /* =========================================
-   19. ДЕКОР: ЗЕРНИСТОСТЬ ФОНА
+   20. ДЕКОР: ЗЕРНИСТОСТЬ ФОНА
    ========================================= */
 body::before {
   content: "";

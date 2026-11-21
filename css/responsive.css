@@ -1,0 +1,390 @@
+/* =========================================
+   responsive.css — адаптивные правила.
+   Подключается ПОСЛЕ style.css, поэтому переопределяет базовые стили.
+
+   Подход Mobile First:
+   style.css описывает телефон (от 360px), а здесь медиазапросы min-width
+   по очереди «расширяют» вёрстку на больших экранах.
+
+   Брейкпоинты:
+     480px  — крупный телефон
+     768px  — планшет
+     1024px — ноутбук / небольшой десктоп
+   На 1440px сайт не растягивается: контент ограничен max-width: 1100px.
+   ========================================= */
+
+
+/* =========================================
+   0. ПРАВИЛА ДЛЯ ВСЕХ ШИРИН
+   ========================================= */
+
+/* картинки и видео никогда не шире своего контейнера */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* длинное слово в заголовке переносится, а не распирает страницу вбок */
+h1,
+h2,
+h3 {
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+
+/* эффекты наведения — только там, где есть мышь.
+   На телефоне :hover «залипает» после тапа, поэтому там его не включаем */
+@media (hover: hover) {
+  .product-card:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+/* пользователь попросил систему убрать анимации — убираем */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+
+/* =========================================
+   1. КРУПНЫЙ ТЕЛЕФОН — от 480px
+   ========================================= */
+@media (min-width: 480px) {
+
+  /* hero: кнопка и ссылка снова в одну строку */
+  .hero__actions {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-lg);
+  }
+
+  /* сетка карточек: 2 колонки */
+  .popular__grid,
+  .catalog__products {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* карточка становится вертикальной: картинка сверху во всю ширину */
+  .product-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .product-card__media {
+    margin-bottom: var(--space-md);
+  }
+
+  /* таблица снова обычная таблица; если не влезает — прокручивается внутри .table-wrapper */
+  .specs {
+    display: table;
+    min-width: 520px;
+  }
+
+  .specs tbody {
+    display: table-row-group;
+  }
+
+  .specs thead {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    display: table-header-group;
+  }
+
+  .specs__row {
+    display: table-row;
+    padding: 0;
+    border-bottom: 0;
+  }
+
+  .specs__cell {
+    display: table-cell;
+    padding: 12px var(--space-md);
+    border-bottom: 2px solid var(--color-border);
+  }
+
+  .specs__cell--title {
+    font-size: inherit;
+    text-transform: none;
+    letter-spacing: normal;
+    color: inherit;
+  }
+
+  .specs__row:last-child .specs__cell {
+    border-bottom: 0;
+  }
+
+  /* кнопки формы — в строку, прижаты вправо */
+  .order-form__actions {
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+
+  .order-form__actions .button {
+    width: auto;
+  }
+
+  .product__info .button {
+    width: auto;
+  }
+
+  /* сообщение об отправке — плашка в правом нижнем углу */
+  .success-message {
+    left: auto;
+    right: var(--space-lg);
+    bottom: var(--space-lg);
+    max-width: 380px;
+  }
+}
+
+
+/* =========================================
+   2. ПЛАНШЕТ — от 768px
+   ========================================= */
+@media (min-width: 768px) {
+
+  /* на большом экране отступы между секциями крупнее */
+  :root {
+    --space-xl: 64px;
+    --header-offset: 100px;
+  }
+
+  /* шапка: бургер прячем, меню показываем в строку */
+  .site-header {
+    padding: var(--space-md) var(--space-lg);
+  }
+
+  .site-header__logo {
+    font-size: 28px;
+  }
+
+  .nav-toggle {
+    display: none;
+  }
+
+  .site-nav {
+    display: block;
+    position: static;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+    background: none;
+  }
+
+  .site-nav__list {
+    flex-direction: row;
+    gap: var(--space-lg);
+  }
+
+  .site-nav__link {
+    font-size: 16px;
+  }
+
+  /* типографика */
+  .page {
+    padding: var(--space-lg);
+  }
+
+  .page-title {
+    font-size: 48px;
+  }
+
+  .section-title {
+    font-size: 40px;
+  }
+
+  .section-title::after {
+    height: 14px;
+  }
+
+  .hero {
+    padding: var(--space-xl) 0;
+  }
+
+  .hero__label {
+    font-size: 16px;
+  }
+
+  .hero__title {
+    font-size: 56px;
+  }
+
+  .hero__accent {
+    padding: 0 16px 6px;
+  }
+
+  .hero__text {
+    font-size: 20px;
+  }
+
+  /* сетки карточек: 3 колонки */
+  .popular__grid,
+  .catalog__products {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .product-card__price {
+    font-size: 22px;
+  }
+
+  .product-card__title {
+    font-size: 20px;
+  }
+
+  /* FAQ */
+  .faq__question {
+    padding: var(--space-md) var(--space-lg);
+    font-size: 18px;
+  }
+
+  .faq__answer {
+    padding: 0 var(--space-lg) var(--space-md);
+  }
+
+  /* промо */
+  .promo {
+    padding: var(--space-lg);
+  }
+
+  .promo__title {
+    font-size: 32px;
+  }
+
+  /* страница товара: картинка и описание в две колонки, картинка квадратная */
+  .product {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-xl);
+  }
+
+  .product__image {
+    aspect-ratio: 1 / 1;
+  }
+
+  .product__title {
+    font-size: 48px;
+  }
+
+  .product__price {
+    font-size: 32px;
+    margin-bottom: var(--space-lg);
+  }
+
+  /* модальное окно */
+  .order-dialog {
+    padding: var(--space-lg);
+  }
+
+  .order-dialog__title {
+    font-size: 32px;
+    margin-bottom: var(--space-lg);
+  }
+
+  /* форма заявки: две колонки, длинные поля — на всю ширину */
+  .order-page {
+    max-width: 760px;
+  }
+
+  .order-form--columns {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--space-lg);
+  }
+
+  .order-form--columns .order-form__field--wide,
+  .order-form--columns .order-form__actions {
+    grid-column: 1 / -1;
+  }
+
+  /* контакты: информация и форма обратной связи рядом */
+  .contacts-layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-lg);
+  }
+
+  .feedback {
+    padding: var(--space-lg);
+  }
+
+  /* подвал */
+  .site-footer {
+    padding: var(--space-lg);
+  }
+}
+
+
+/* =========================================
+   3. НОУТБУК / DESKTOP — от 1024px
+   ========================================= */
+@media (min-width: 1024px) {
+
+  .hero__title {
+    font-size: 64px;
+  }
+
+  /* преимущества: 3 колонки */
+  .advantages__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-lg);
+  }
+
+  .advantages__item {
+    padding: var(--space-lg) var(--space-lg) var(--space-lg) 88px;
+  }
+
+  .advantages__item::before {
+    top: var(--space-lg);
+    left: var(--space-lg);
+  }
+
+  .advantages__title {
+    font-size: 24px;
+  }
+
+  /* главная: хиты + «Камень дня» сбоку */
+  .home-layout {
+    grid-template-columns: minmax(0, 1fr) 260px;
+  }
+
+  .promo {
+    transform: rotate(1.5deg);
+  }
+
+  /* каталог: фильтры становятся боковой колонкой и липнут при прокрутке */
+  .catalog {
+    grid-template-columns: 220px minmax(0, 1fr);
+    grid-template-areas: "filters products";
+  }
+
+  .filters {
+    position: sticky;
+    top: var(--header-offset);
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  /* кнопка «Показать» на десктопе не нужна — панель всегда открыта */
+  .filters__toggle {
+    display: none;
+  }
+
+  .filters__panel {
+    display: block;
+  }
+
+  .filters__title {
+    font-size: 28px;
+  }
+}
