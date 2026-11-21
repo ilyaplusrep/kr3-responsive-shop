@@ -8,7 +8,6 @@
     <meta name="description"
         content="Интернет-магазин камней: офисные, подарочные и премиальные камни. Хиты продаж и доставка.">
 
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -16,15 +15,22 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
     <script src="js/main.js" defer></script>
-
 </head>
 
 <body>
+    <a class="skip-link" href="#main">Перейти к основному содержимому</a>
+
     <header class="site-header">
         <a class="site-header__logo" href="index.html">RockRockRock</a>
 
-        <nav class="site-nav" aria-label="Основная навигация">
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+            <span class="nav-toggle__icon" aria-hidden="true"></span>
+            Меню
+        </button>
+
+        <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
             <ul class="site-nav__list">
                 <li class="site-nav__item"><a class="site-nav__link site-nav__link--active" href="index.html"
                         aria-current="page">Главная</a></li>
@@ -36,17 +42,15 @@
         </nav>
     </header>
 
-
-
-    <main class="page">
+    <main class="page" id="main" tabindex="-1">
         <section class="hero">
             <p class="hero__label">Магазин №1 среди камней</p>
             <h1 class="hero__title">Камни, которые <span class="hero__accent">ничего</span> не&nbsp;делают</h1>
             <p class="hero__text">Не ломаются, не разряжаются, не требуют обновлений. Просто лежат. Идеально.</p>
-            <a class="button" href="catalog.html">Смотреть каталог</a>
-            <a class="hero__link" href="#advantages">Почему камни?</a>
-
-
+            <div class="hero__actions">
+                <a class="button" href="catalog.html">Смотреть каталог</a>
+                <a class="hero__link" href="#advantages">Почему камни?</a>
+            </div>
         </section>
 
         <section class="advantages" id="advantages">
@@ -67,49 +71,68 @@
             </ul>
         </section>
 
-
-
         <div class="home-layout">
             <section class="popular" id="popular">
                 <h2 class="section-title">Хиты продаж</h2>
 
                 <div class="popular__grid">
                     <article class="product-card">
-                        <img class="product-card__image" src="images/rock-1.webp" alt="Камень Обыкновенный" width="300"
-                            height="300">
+                        <picture class="product-card__media">
+                            <source type="image/avif"
+                                srcset="images/rock-1-sm.avif 320w, images/rock-1-lg.avif 350w"
+                                sizes="(min-width: 1024px) 240px, (min-width: 768px) 30vw, (min-width: 480px) 45vw, 104px">
+                            <img class="product-card__image" src="images/rock-1-sm.webp"
+                                srcset="images/rock-1-sm.webp 320w, images/rock-1-lg.webp 350w"
+                                sizes="(min-width: 1024px) 240px, (min-width: 768px) 30vw, (min-width: 480px) 45vw, 104px"
+                                alt="Серый гладкий камень круглой формы" width="320" height="320" loading="lazy">
+                        </picture>
                         <span class="product-card__badge badge badge--hit">Хит</span>
                         <p class="product-card__price">99 ₽</p>
                         <h3 class="product-card__title">Камень Обыкновенный</h3>
                         <p class="product-card__description">Классика. Серый, круглый, надёжный. Ничего лишнего.</p>
                         <div class="product-card__actions">
-                            <a class="product-card__link" href="product.html">Подробнее</a>
+                            <a class="product-card__link" href="product.html">Подробнее<span class="visually-hidden"> о товаре «Камень Обыкновенный»</span></a>
                             <button class="button product-card__button" type="button"
                                 data-product="Камень Обыкновенный">Заказать</button>
                         </div>
                     </article>
 
                     <article class="product-card">
-                        <img class="product-card__image" src="images/rock-2.webp" alt="Большой камень" width="300"
-                            height="300">
+                        <picture class="product-card__media">
+                            <source type="image/avif"
+                                srcset="images/rock-2-sm.avif 320w, images/rock-2-lg.avif 800w"
+                                sizes="(min-width: 1024px) 240px, (min-width: 768px) 30vw, (min-width: 480px) 45vw, 104px">
+                            <img class="product-card__image" src="images/rock-2-sm.webp"
+                                srcset="images/rock-2-sm.webp 320w, images/rock-2-lg.webp 800w"
+                                sizes="(min-width: 1024px) 240px, (min-width: 768px) 30vw, (min-width: 480px) 45vw, 104px"
+                                alt="Крупный тёмный валун" width="320" height="320" loading="lazy">
+                        </picture>
                         <span class="product-card__badge badge badge--new">Новинка</span>
                         <p class="product-card__price">4999 ₽</p>
                         <h3 class="product-card__title">Большой камень</h3>
                         <p class="product-card__description">Реально большой. Давит. Всегда рядом.</p>
                         <div class="product-card__actions">
-                            <a class="product-card__link" href="product.html">Подробнее</a>
+                            <a class="product-card__link" href="product.html">Подробнее<span class="visually-hidden"> о товаре «Большой камень»</span></a>
                             <button class="button product-card__button" type="button"
                                 data-product="Большой камень">Заказать</button>
                         </div>
                     </article>
 
                     <article class="product-card product-card--soldout">
-                        <img class="product-card__image" src="images/rock-3.webp" alt="Камень «Люкс»" width="300"
-                            height="300">
+                        <picture class="product-card__media">
+                            <source type="image/avif"
+                                srcset="images/rock-3-sm.avif 320w, images/rock-3-lg.avif 800w"
+                                sizes="(min-width: 1024px) 240px, (min-width: 768px) 30vw, (min-width: 480px) 45vw, 104px">
+                            <img class="product-card__image" src="images/rock-3-sm.webp"
+                                srcset="images/rock-3-sm.webp 320w, images/rock-3-lg.webp 800w"
+                                sizes="(min-width: 1024px) 240px, (min-width: 768px) 30vw, (min-width: 480px) 45vw, 104px"
+                                alt="Блестящий камень премиум-класса" width="320" height="320" loading="lazy">
+                        </picture>
                         <p class="product-card__price">9999 ₽</p>
                         <h3 class="product-card__title">Камень «Люкс»</h3>
                         <p class="product-card__description">Камень подороже.</p>
                         <div class="product-card__actions">
-                            <a class="product-card__link" href="product.html">Подробнее</a>
+                            <a class="product-card__link" href="product.html">Подробнее<span class="visually-hidden"> о товаре «Камень «Люкс»»</span></a>
                             <button class="button product-card__button" type="button" data-product="Камень «Люкс»"
                                 disabled>Нет в наличии</button>
                         </div>
@@ -117,8 +140,8 @@
                 </div>
             </section>
 
-            <aside class="promo">
-                <h2 class="promo__title">Камень дня</h2>
+            <aside class="promo" aria-labelledby="promo-title">
+                <h2 class="promo__title" id="promo-title">Камень дня</h2>
                 <p class="promo__text">Камень с глазками — скидка 20%. Он смотрит на вас. Купите его.</p>
                 <a class="promo__link" href="catalog.html">Найти в каталоге →</a>
             </aside>
@@ -150,10 +173,7 @@
             </div>
         </section>
 
-
-
-
-        <!-- модальное окно -->
+        <!-- модальное окно: showModal() держит фокус внутри, Esc закрывает -->
         <dialog class="order-dialog" id="order-dialog" aria-labelledby="order-dialog-title">
             <h2 class="order-dialog__title" id="order-dialog-title">Оформление заявки</h2>
 
@@ -175,8 +195,9 @@
                 <div class="order-form__field">
                     <label class="order-form__label" for="order-phone">Телефон</label>
                     <input class="order-form__input" id="order-phone" name="phone" type="tel" inputmode="tel"
-                        placeholder="+7 (900) 000-00-00" pattern="^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$" required>
-                    <small class="order-form__hint">Формат: +7 (900) 000-00-00</small>
+                        placeholder="+7 (900) 000-00-00" pattern="^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$"
+                        autocomplete="tel" aria-describedby="order-phone-hint" required>
+                    <small class="order-form__hint" id="order-phone-hint">Формат: +7 (900) 000-00-00</small>
                 </div>
 
                 <div class="order-form__field">
@@ -196,7 +217,7 @@
 
                 <div class="order-form__field">
                     <label class="order-form__label" for="order-comment">Комментарий</label>
-                    <textarea class="order-form__input" id="order-comment" name="comment" rows="4"
+                    <textarea class="order-form__input" id="order-comment" name="comment" rows="3"
                         placeholder="Пожелания к камню"></textarea>
                 </div>
 
@@ -215,14 +236,9 @@
         <p class="success-message" id="success-message" role="status" hidden>
             Форма успешно отправлена! Камень уже собирается в путь.
         </p>
-
     </main>
 
-
-
-
-
-    <footer class="site-footer" id="contacts">
+    <footer class="site-footer">
         <nav class="footer-nav" aria-label="Быстрые ссылки">
             <ul class="footer-nav__list">
                 <li class="footer-nav__item"><a class="footer-nav__link" href="index.html#advantages">Почему камни</a></li>
@@ -235,7 +251,6 @@
         <p class="site-footer__text">© 2026 RockRockRock. Все камни защищены.</p>
         <p class="site-footer__text">Почта: rockrock@ro.ck · Телефон: +7 (900) 000-00-00</p>
     </footer>
-
 </body>
 
 </html>

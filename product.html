@@ -12,14 +12,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@700;900&family=Manrope:wght@400;500;600;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
     <script src="js/main.js" defer></script>
 </head>
 
 <body>
+    <a class="skip-link" href="#main">Перейти к основному содержимому</a>
+
     <header class="site-header">
         <a class="site-header__logo" href="index.html">RockRockRock</a>
 
-        <nav class="site-nav" aria-label="Основная навигация">
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+            <span class="nav-toggle__icon" aria-hidden="true"></span>
+            Меню
+        </button>
+
+        <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
             <ul class="site-nav__list">
                 <li class="site-nav__item"><a class="site-nav__link" href="index.html">Главная</a></li>
                 <li class="site-nav__item"><a class="site-nav__link" href="catalog.html">Каталог</a></li>
@@ -30,7 +38,7 @@
         </nav>
     </header>
 
-    <main class="page">
+    <main class="page" id="main" tabindex="-1">
         <nav class="breadcrumbs" aria-label="Хлебные крошки">
             <a class="breadcrumbs__item breadcrumbs__link" href="index.html">Главная</a>
             <a class="breadcrumbs__item breadcrumbs__link" href="catalog.html">Каталог</a>
@@ -38,7 +46,14 @@
         </nav>
 
         <article class="product">
-            <img class="product__image" src="images/rock-1.webp" alt="Серый круглый камень на светлом фоне" width="480" height="480">
+            <!-- picture: на телефоне широкий кадр 4:3, с 768px — квадратный.
+                 Внутри каждого варианта браузер берёт AVIF, если умеет, иначе WebP -->
+            <picture class="product__media">
+                <source media="(min-width: 768px)" type="image/avif" srcset="images/rock-1-lg.avif" width="350" height="350">
+                <source media="(min-width: 768px)" type="image/webp" srcset="images/rock-1-lg.webp" width="350" height="350">
+                <source type="image/avif" srcset="images/rock-1-wide.avif" width="350" height="262">
+                <img class="product__image" src="images/rock-1-wide.webp" alt="Серый гладкий камень круглой формы на светлом фоне" width="350" height="262">
+            </picture>
 
             <div class="product__info">
                 <span class="product__badge badge badge--hit">Хит</span>
@@ -49,46 +64,50 @@
             </div>
         </article>
 
-        <section class="specs-section">
-            <table class="specs">
-                <caption class="specs__caption">Характеристики камня</caption>
-                <thead>
-                    <tr class="specs__row specs__row--head">
-                        <th class="specs__cell specs__cell--head" scope="col">Параметр</th>
-                        <th class="specs__cell specs__cell--head" scope="col">Значение</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="specs__row">
-                        <th class="specs__cell specs__cell--title" scope="row">Вес</th>
-                        <td class="specs__cell">450 г</td>
-                    </tr>
-                    <tr class="specs__row">
-                        <th class="specs__cell specs__cell--title" scope="row">Твёрдость по Моосу</th>
-                        <td class="specs__cell">6</td>
-                    </tr>
-                    <tr class="specs__row">
-                        <th class="specs__cell specs__cell--title" scope="row">Уровень спокойствия</th>
-                        <td class="specs__cell">10 из 10</td>
-                    </tr>
-                    <tr class="specs__row">
-                        <th class="specs__cell specs__cell--title" scope="row">Полезность</th>
-                        <td class="specs__cell">0</td>
-                    </tr>
-                    <tr class="specs__row">
-                        <th class="specs__cell specs__cell--title" scope="row">Требует ухода</th>
-                        <td class="specs__cell">Нет</td>
-                    </tr>
-                    <tr class="specs__row">
-                        <th class="specs__cell specs__cell--title" scope="row">Гарантия</th>
-                        <td class="specs__cell">Вечная — он камень</td>
-                    </tr>
-                </tbody>
-            </table>
+        <section class="specs-section" aria-labelledby="specs-title">
+            <h2 class="specs-section__title" id="specs-title">Характеристики камня</h2>
+
+            <!-- tabindex="0": если таблица прокручивается вбок, до неё можно дойти Tab-ом и листать стрелками -->
+            <div class="table-wrapper" tabindex="0" role="region" aria-labelledby="specs-title">
+                <table class="specs">
+                    <thead>
+                        <tr class="specs__row specs__row--head">
+                            <th class="specs__cell specs__cell--head" scope="col">Параметр</th>
+                            <th class="specs__cell specs__cell--head" scope="col">Значение</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="specs__row">
+                            <th class="specs__cell specs__cell--title" scope="row">Вес</th>
+                            <td class="specs__cell">450 г</td>
+                        </tr>
+                        <tr class="specs__row">
+                            <th class="specs__cell specs__cell--title" scope="row">Твёрдость по Моосу</th>
+                            <td class="specs__cell">6</td>
+                        </tr>
+                        <tr class="specs__row">
+                            <th class="specs__cell specs__cell--title" scope="row">Уровень спокойствия</th>
+                            <td class="specs__cell">10 из 10</td>
+                        </tr>
+                        <tr class="specs__row">
+                            <th class="specs__cell specs__cell--title" scope="row">Полезность</th>
+                            <td class="specs__cell">0</td>
+                        </tr>
+                        <tr class="specs__row">
+                            <th class="specs__cell specs__cell--title" scope="row">Требует ухода</th>
+                            <td class="specs__cell">Нет</td>
+                        </tr>
+                        <tr class="specs__row">
+                            <th class="specs__cell specs__cell--title" scope="row">Гарантия</th>
+                            <td class="specs__cell">Вечная — он камень</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
     </main>
 
-    <footer class="site-footer" id="contacts">
+    <footer class="site-footer">
         <nav class="footer-nav" aria-label="Быстрые ссылки">
             <ul class="footer-nav__list">
                 <li class="footer-nav__item"><a class="footer-nav__link" href="index.html#advantages">Почему камни</a></li>

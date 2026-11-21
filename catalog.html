@@ -14,14 +14,22 @@
         rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
     <script src="js/main.js" defer></script>
 </head>
 
 <body>
+    <a class="skip-link" href="#main">Перейти к основному содержимому</a>
+
     <header class="site-header">
         <a class="site-header__logo" href="index.html">RockRockRock</a>
 
-        <nav class="site-nav" aria-label="Основная навигация">
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+            <span class="nav-toggle__icon" aria-hidden="true"></span>
+            Меню
+        </button>
+
+        <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
             <ul class="site-nav__list">
                 <li class="site-nav__item"><a class="site-nav__link" href="index.html">Главная</a></li>
                 <li class="site-nav__item"><a class="site-nav__link site-nav__link--active" href="catalog.html"
@@ -33,7 +41,7 @@
         </nav>
     </header>
 
-    <main class="page">
+    <main class="page" id="main" tabindex="-1">
         <nav class="breadcrumbs" aria-label="Хлебные крошки">
             <a class="breadcrumbs__item breadcrumbs__link" href="index.html">Главная</a>
             <span class="breadcrumbs__item breadcrumbs__item--current" aria-current="page">Каталог</span>
@@ -42,102 +50,159 @@
         <h1 class="page-title">Каталог камней</h1>
 
         <div class="catalog">
-            <aside class="filters" id="filters">
-                <h2 class="filters__title">Фильтры</h2>
+            <aside class="filters" id="filters" aria-labelledby="filters-title">
+                <div class="filters__head">
+                    <h2 class="filters__title" id="filters-title">Фильтры</h2>
+                    <!-- на телефоне и планшете панель свёрнута, кнопка её открывает -->
+                    <button class="filters__toggle button button--ghost button--small" type="button"
+                        aria-expanded="false" aria-controls="filters-panel">Показать</button>
+                </div>
 
-                <h3 class="filters__subtitle">Категория</h3>
-                <ul class="filters__list">
-                    <li class="filters__item"><label class="filters__option"><input class="filters__checkbox" type="checkbox" name="category" value="office">
-                            Офисные</label></li>
-                    <li class="filters__item"><label class="filters__option"><input class="filters__checkbox" type="checkbox" name="category" value="gift">
-                            Подарочные</label></li>
-                    <li class="filters__item"><label class="filters__option"><input class="filters__checkbox" type="checkbox" name="category" value="premium">
-                            Премиум</label></li>
-                    <li class="filters__item"><label class="filters__option"><input class="filters__checkbox" type="checkbox" name="category" value="budget"> Для
-                            бедных</label></li>
-                </ul>
+                <form class="filters__panel" id="filters-panel">
+                    <fieldset class="filters__group">
+                        <legend class="filters__subtitle">Категория</legend>
+                        <ul class="filters__list">
+                            <li class="filters__item"><label class="filters__option"><input class="filters__checkbox" type="checkbox" name="category" value="office"> Офисные</label></li>
+                            <li class="filters__item"><label class="filters__option"><input class="filters__checkbox" type="checkbox" name="category" value="gift"> Подарочные</label></li>
+                            <li class="filters__item"><label class="filters__option"><input class="filters__checkbox" type="checkbox" name="category" value="premium"> Премиум</label></li>
+                            <li class="filters__item"><label class="filters__option"><input class="filters__checkbox" type="checkbox" name="category" value="budget"> Для бедных</label></li>
+                        </ul>
+                    </fieldset>
 
-                <h3 class="filters__subtitle">Наличие</h3>
-                <ul class="filters__list">
-                    <li class="filters__item"><label class="filters__option"><input class="filters__checkbox" type="checkbox" name="stock" value="yes"> Только в
-                            наличии</label></li>
-                </ul>
+                    <fieldset class="filters__group">
+                        <legend class="filters__subtitle">Наличие</legend>
+                        <ul class="filters__list">
+                            <li class="filters__item"><label class="filters__option"><input class="filters__checkbox" type="checkbox" name="stock" value="yes"> Только в наличии</label></li>
+                        </ul>
+                    </fieldset>
+
+                    <button class="button button--ghost button--small" type="reset">Сбросить</button>
+                </form>
             </aside>
 
-            <section class="catalog__products" aria-label="Список товаров">
-                <article class="product-card">
-                    <img class="product-card__image" src="images/rock-1.webp" alt="Камень Обыкновенный" width="300"
-                        height="300">
-                    <span class="product-card__badge badge badge--hit">Хит</span>
-                    <p class="product-card__price">99 ₽</p>
-                    <h3 class="product-card__title">Камень Обыкновенный</h3>
-                    <p class="product-card__description">Классика. Серый, круглый, надёжный.</p>
-                    <div class="product-card__actions">
-                        <a class="product-card__link" href="product.html">Подробнее</a>
-                    </div>
-                </article>
+            <section class="catalog__results" aria-labelledby="products-title">
+                <h2 class="visually-hidden" id="products-title">Список товаров</h2>
+                <!-- aria-live: скринридер сам озвучит новое число после фильтрации -->
+                <p class="catalog__count" id="catalog-count" aria-live="polite">Найдено камней: 6</p>
+                <p class="catalog__empty" id="catalog-empty" hidden>Таких камней нет. Попробуйте снять часть фильтров.</p>
 
-                <article class="product-card">
-                    <img class="product-card__image" src="images/rock-2.webp" alt="Большой камень" width="300"
-                        height="300">
-                    <span class="product-card__badge badge badge--new">Новинка</span>
-                    <p class="product-card__price">4999 ₽</p>
-                    <h3 class="product-card__title">Большой камень</h3>
-                    <p class="product-card__description">Реально большой. Давит. Всегда рядом.</p>
-                    <div class="product-card__actions">
-                        <a class="product-card__link" href="product.html">Подробнее</a>
-                    </div>
-                </article>
+                <div class="catalog__products">
+                    <article class="product-card" data-category="office budget" data-stock="yes">
+                        <picture class="product-card__media">
+                            <source type="image/avif"
+                                srcset="images/rock-1-sm.avif 320w, images/rock-1-lg.avif 350w"
+                                sizes="(min-width: 1024px) 250px, (min-width: 768px) 30vw, (min-width: 480px) 45vw, 104px">
+                            <img class="product-card__image" src="images/rock-1-sm.webp"
+                                srcset="images/rock-1-sm.webp 320w, images/rock-1-lg.webp 350w"
+                                sizes="(min-width: 1024px) 250px, (min-width: 768px) 30vw, (min-width: 480px) 45vw, 104px"
+                                alt="Серый гладкий камень круглой формы" width="320" height="320" loading="lazy">
+                        </picture>
+                        <span class="product-card__badge badge badge--hit">Хит</span>
+                        <p class="product-card__price">99 ₽</p>
+                        <h3 class="product-card__title">Камень Обыкновенный</h3>
+                        <p class="product-card__description">Классика. Серый, круглый, надёжный.</p>
+                        <div class="product-card__actions">
+                            <a class="product-card__link" href="product.html">Подробнее<span class="visually-hidden"> о товаре «Камень Обыкновенный»</span></a>
+                        </div>
+                    </article>
 
-                <article class="product-card product-card--soldout">
-                    <img class="product-card__image" src="images/rock-3.webp" alt="Камень «Люкс»" width="300"
-                        height="300">
-                    <p class="product-card__price">9999 ₽</p>
-                    <h3 class="product-card__title">Камень «Люкс»</h3>
-                    <p class="product-card__description">Камень подороже. Временно закончился.</p>
-                    <div class="product-card__actions">
-                        <a class="product-card__link" href="product.html">Подробнее</a>
-                    </div>
-                </article>
+                    <article class="product-card" data-category="office gift" data-stock="yes">
+                        <picture class="product-card__media">
+                            <source type="image/avif"
+                                srcset="images/rock-2-sm.avif 320w, images/rock-2-lg.avif 800w"
+                                sizes="(min-width: 1024px) 250px, (min-width: 768px) 30vw, (min-width: 480px) 45vw, 104px">
+                            <img class="product-card__image" src="images/rock-2-sm.webp"
+                                srcset="images/rock-2-sm.webp 320w, images/rock-2-lg.webp 800w"
+                                sizes="(min-width: 1024px) 250px, (min-width: 768px) 30vw, (min-width: 480px) 45vw, 104px"
+                                alt="Крупный тёмный валун" width="320" height="320" loading="lazy">
+                        </picture>
+                        <span class="product-card__badge badge badge--new">Новинка</span>
+                        <p class="product-card__price">4999 ₽</p>
+                        <h3 class="product-card__title">Большой камень</h3>
+                        <p class="product-card__description">Реально большой. Давит. Всегда рядом.</p>
+                        <div class="product-card__actions">
+                            <a class="product-card__link" href="product.html">Подробнее<span class="visually-hidden"> о товаре «Большой камень»</span></a>
+                        </div>
+                    </article>
 
-                <article class="product-card">
-                    <img class="product-card__image" src="images/rock-4.webp" alt="Маленький камень" width="300"
-                        height="300">
-                    <p class="product-card__price">49 ₽</p>
-                    <h3 class="product-card__title">Маленький камень</h3>
-                    <p class="product-card__description">Маленький, бесполезный.</p>
-                    <div class="product-card__actions">
-                        <a class="product-card__link" href="product.html">Подробнее</a>
-                    </div>
-                </article>
+                    <article class="product-card product-card--soldout" data-category="premium" data-stock="no">
+                        <picture class="product-card__media">
+                            <source type="image/avif"
+                                srcset="images/rock-3-sm.avif 320w, images/rock-3-lg.avif 800w"
+                                sizes="(min-width: 1024px) 250px, (min-width: 768px) 30vw, (min-width: 480px) 45vw, 104px">
+                            <img class="product-card__image" src="images/rock-3-sm.webp"
+                                srcset="images/rock-3-sm.webp 320w, images/rock-3-lg.webp 800w"
+                                sizes="(min-width: 1024px) 250px, (min-width: 768px) 30vw, (min-width: 480px) 45vw, 104px"
+                                alt="Блестящий камень премиум-класса" width="320" height="320" loading="lazy">
+                        </picture>
+                        <p class="product-card__price">9999 ₽</p>
+                        <h3 class="product-card__title">Камень «Люкс»</h3>
+                        <p class="product-card__description">Камень подороже. Временно закончился.</p>
+                        <div class="product-card__actions">
+                            <a class="product-card__link" href="product.html">Подробнее<span class="visually-hidden"> о товаре «Камень «Люкс»»</span></a>
+                        </div>
+                    </article>
 
-                <article class="product-card">
-                    <img class="product-card__image" src="images/rock-5.webp" alt="Камень с глазками" width="300"
-                        height="300">
-                    <span class="product-card__badge badge badge--sale">Скидка</span>
-                    <p class="product-card__price">199 ₽</p>
-                    <h3 class="product-card__title">Камень с глазками</h3>
-                    <p class="product-card__description">Смотрит на вас. Всегда.</p>
-                    <div class="product-card__actions">
-                        <a class="product-card__link" href="product.html">Подробнее</a>
-                    </div>
-                </article>
+                    <article class="product-card" data-category="budget office" data-stock="yes">
+                        <picture class="product-card__media">
+                            <source type="image/avif"
+                                srcset="images/rock-4-sm.avif 320w, images/rock-4-lg.avif 350w"
+                                sizes="(min-width: 1024px) 250px, (min-width: 768px) 30vw, (min-width: 480px) 45vw, 104px">
+                            <img class="product-card__image" src="images/rock-4-sm.webp"
+                                srcset="images/rock-4-sm.webp 320w, images/rock-4-lg.webp 350w"
+                                sizes="(min-width: 1024px) 250px, (min-width: 768px) 30vw, (min-width: 480px) 45vw, 104px"
+                                alt="Небольшой серый камешек" width="320" height="320" loading="lazy">
+                        </picture>
+                        <p class="product-card__price">49 ₽</p>
+                        <h3 class="product-card__title">Маленький камень</h3>
+                        <p class="product-card__description">Маленький, бесполезный.</p>
+                        <div class="product-card__actions">
+                            <a class="product-card__link" href="product.html">Подробнее<span class="visually-hidden"> о товаре «Маленький камень»</span></a>
+                        </div>
+                    </article>
 
-                <article class="product-card">
-                    <img class="product-card__image" src="images/rock-6.webp" alt="Драгоценный камень" width="300"
-                        height="300">
-                    <p class="product-card__price">1999 ₽</p>
-                    <h3 class="product-card__title">Драгоценный камень</h3>
-                    <p class="product-card__description">На самом деле нет.</p>
-                    <div class="product-card__actions">
-                        <a class="product-card__link" href="product.html">Подробнее</a>
-                    </div>
-                </article>
+                    <article class="product-card" data-category="gift budget" data-stock="yes">
+                        <picture class="product-card__media">
+                            <source type="image/avif"
+                                srcset="images/rock-5-sm.avif 320w, images/rock-5-lg.avif 400w"
+                                sizes="(min-width: 1024px) 250px, (min-width: 768px) 30vw, (min-width: 480px) 45vw, 104px">
+                            <img class="product-card__image" src="images/rock-5-sm.webp"
+                                srcset="images/rock-5-sm.webp 320w, images/rock-5-lg.webp 400w"
+                                sizes="(min-width: 1024px) 250px, (min-width: 768px) 30vw, (min-width: 480px) 45vw, 104px"
+                                alt="Камень с наклеенными глазками" width="320" height="320" loading="lazy">
+                        </picture>
+                        <span class="product-card__badge badge badge--sale">Скидка</span>
+                        <p class="product-card__price">199 ₽</p>
+                        <h3 class="product-card__title">Камень с глазками</h3>
+                        <p class="product-card__description">Смотрит на вас. Всегда.</p>
+                        <div class="product-card__actions">
+                            <a class="product-card__link" href="product.html">Подробнее<span class="visually-hidden"> о товаре «Камень с глазками»</span></a>
+                        </div>
+                    </article>
+
+                    <article class="product-card" data-category="premium gift" data-stock="yes">
+                        <picture class="product-card__media">
+                            <source type="image/avif"
+                                srcset="images/rock-6-sm.avif 320w, images/rock-6-lg.avif 800w"
+                                sizes="(min-width: 1024px) 250px, (min-width: 768px) 30vw, (min-width: 480px) 45vw, 104px">
+                            <img class="product-card__image" src="images/rock-6-sm.webp"
+                                srcset="images/rock-6-sm.webp 320w, images/rock-6-lg.webp 800w"
+                                sizes="(min-width: 1024px) 250px, (min-width: 768px) 30vw, (min-width: 480px) 45vw, 104px"
+                                alt="Яркий камень, похожий на самоцвет" width="320" height="320" loading="lazy">
+                        </picture>
+                        <p class="product-card__price">1999 ₽</p>
+                        <h3 class="product-card__title">Драгоценный камень</h3>
+                        <p class="product-card__description">На самом деле нет.</p>
+                        <div class="product-card__actions">
+                            <a class="product-card__link" href="product.html">Подробнее<span class="visually-hidden"> о товаре «Драгоценный камень»</span></a>
+                        </div>
+                    </article>
+                </div>
             </section>
         </div>
     </main>
 
-    <footer class="site-footer" id="contacts">
+    <footer class="site-footer">
         <nav class="footer-nav" aria-label="Быстрые ссылки">
             <ul class="footer-nav__list">
                 <li class="footer-nav__item"><a class="footer-nav__link" href="index.html#advantages">Почему камни</a></li>
