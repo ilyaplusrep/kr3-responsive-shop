@@ -5,21 +5,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Контакты — RockRockRock</title>
-    <meta name="description" content="Адрес, телефон и почта магазина камней RockRockRock.">
+    <meta name="description" content="Адрес, телефон и почта магазина камней RockRockRock. Форма обратной связи.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@700;900&family=Manrope:wght@400;500;600;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
     <script src="js/main.js" defer></script>
 </head>
 
 <body>
+    <a class="skip-link" href="#main">Перейти к основному содержимому</a>
+
     <header class="site-header">
         <a class="site-header__logo" href="index.html">RockRockRock</a>
 
-        <nav class="site-nav" aria-label="Основная навигация">
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+            <span class="nav-toggle__icon" aria-hidden="true"></span>
+            Меню
+        </button>
+
+        <nav class="site-nav" id="site-nav" aria-label="Основная навигация">
             <ul class="site-nav__list">
                 <li class="site-nav__item"><a class="site-nav__link" href="index.html">Главная</a></li>
                 <li class="site-nav__item"><a class="site-nav__link" href="catalog.html">Каталог</a></li>
@@ -30,7 +38,7 @@
         </nav>
     </header>
 
-    <main class="page">
+    <main class="page" id="main" tabindex="-1">
         <nav class="breadcrumbs" aria-label="Хлебные крошки">
             <a class="breadcrumbs__item breadcrumbs__link" href="index.html">Главная</a>
             <span class="breadcrumbs__item breadcrumbs__item--current" aria-current="page">Контакты</span>
@@ -38,24 +46,59 @@
 
         <h1 class="page-title">Контакты</h1>
 
-        <section class="contacts" id="address">
-            <h2 class="section-title">Как нас найти</h2>
-            <address class="contacts__list">
-                <p class="contacts__item"><b>Адрес:</b> г. Москва, ул. Каменная, д. 1 (у большого камня)</p>
-                <p class="contacts__item"><b>Телефон:</b> <a class="contacts__link" href="tel:+79000000000">+7 (900) 000-00-00</a></p>
-                <p class="contacts__item"><b>Почта:</b> <a class="contacts__link" href="mailto:rockrock@ro.ck">rockrock@ro.ck</a></p>
-                <p class="contacts__item"><b>Часы работы:</b> всегда. Камни не спят.</p>
-            </address>
-        </section>
+        <!-- на телефоне блоки друг под другом, с 768px — в две колонки -->
+        <div class="contacts-layout">
+            <section class="contacts" id="address" aria-labelledby="address-title">
+                <h2 class="section-title" id="address-title">Как нас найти</h2>
+                <address class="contacts__list">
+                    <p class="contacts__item"><span class="contacts__label">Адрес</span> г. Москва, ул. Каменная, д. 1 (у большого камня)</p>
+                    <p class="contacts__item"><span class="contacts__label">Телефон</span> <a class="contacts__link" href="tel:+79000000000">+7 (900) 000-00-00</a></p>
+                    <p class="contacts__item"><span class="contacts__label">Почта</span> <a class="contacts__link" href="mailto:rockrock@ro.ck">rockrock@ro.ck</a></p>
+                    <p class="contacts__item"><span class="contacts__label">Часы работы</span> Всегда. Камни не спят.</p>
+                </address>
+            </section>
 
-        <section class="contacts-cta">
-            <h2 class="section-title">Хотите камень?</h2>
-            <p class="contacts-cta__text">Оставьте заявку — мы подберём камень, который подойдёт именно вам.</p>
-            <a class="button" href="order.html">Оформить заявку</a>
-        </section>
+            <section class="feedback" aria-labelledby="feedback-title">
+                <h2 class="section-title" id="feedback-title">Напишите нам</h2>
+                <p class="feedback__text">Задайте вопрос о камнях — ответим в течение геологической эпохи (обычно за день).</p>
+
+                <form class="order-form" id="feedback-form" action="#" method="post" novalidate>
+                    <div class="order-form__field">
+                        <label class="order-form__label" for="feedback-name">Имя</label>
+                        <input class="order-form__input" id="feedback-name" name="name" type="text"
+                            placeholder="Как вас зовут?" minlength="2" autocomplete="given-name" required>
+                    </div>
+
+                    <div class="order-form__field">
+                        <label class="order-form__label" for="feedback-email">E-mail</label>
+                        <input class="order-form__input" id="feedback-email" name="email" type="email"
+                            placeholder="example@mail.ru" autocomplete="email" required>
+                    </div>
+
+                    <div class="order-form__field">
+                        <label class="order-form__label" for="feedback-message">Сообщение</label>
+                        <textarea class="order-form__input" id="feedback-message" name="message" rows="4"
+                            placeholder="Ваш вопрос" minlength="5" required></textarea>
+                    </div>
+
+                    <div class="order-form__field order-form__field--checkbox">
+                        <input class="order-form__checkbox" id="feedback-agreement" name="agreement" type="checkbox" required>
+                        <label class="order-form__checkbox-label" for="feedback-agreement">Я согласен на обработку данных</label>
+                    </div>
+
+                    <div class="order-form__actions">
+                        <button class="button" type="submit">Отправить</button>
+                    </div>
+                </form>
+            </section>
+        </div>
+
+        <p class="success-message" id="success-message" role="status" hidden>
+            Сообщение отправлено! Камень передаст его менеджеру.
+        </p>
     </main>
 
-    <footer class="site-footer" id="contacts">
+    <footer class="site-footer">
         <nav class="footer-nav" aria-label="Быстрые ссылки">
             <ul class="footer-nav__list">
                 <li class="footer-nav__item"><a class="footer-nav__link" href="index.html#advantages">Почему камни</a></li>
